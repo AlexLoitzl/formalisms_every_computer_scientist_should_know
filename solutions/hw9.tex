@@ -1,0 +1,117 @@
+%% \documentclass{article}
+
+%% \usepackage[english]{babel}
+
+%% \usepackage[a4paper,top=2cm,bottom=3cm,left=3cm,right=2cm,marginparwidth=1.75cm]{geometry}
+
+%% % Useful packages
+%% \usepackage{amsmath}
+%% \usepackage{amssymb}
+%% \usepackage{graphicx}
+%% \usepackage[colorlinks=true, allcolors=blue]{hyperref}
+%% \usepackage{tikz}
+%% \usepackage{float}
+%% \usepackage{graphicx}
+%% \usepackage{subcaption}
+%% \usepackage{todonotes}
+%% \usepackage{arydshln}
+%% \usepackage{mathtools}
+%% \usepackage{bussproofs}
+%% \usepackage{xfrac}
+%% \usepackage{changepage}
+%% \usepackage{todonotes}
+%% \usepackage{semantic}
+%% \usepackage{amsthm}
+%% \usepackage{stmaryrd}
+%% \usepackage{algorithm}
+%% \usepackage[noend]{algpseudocode}
+%% \newcommand{\impl}{\Rightarrow }
+%% \renewcommand{\iff}{\Leftrightarrow }
+%% \renewcommand{\phi}{\varphi}
+%% \renewcommand{\epsilon}{\varepsilon}
+%% %% \newcommand{\land}{\wedge }
+%% %% \newcommand{\lor}{\vee }
+%% \newcommand{\A}{\mathcal{A} }
+%% \newcommand{\D}{\mathcal{D} }
+%% \newcommand{\I}{\mathcal{I} }
+%% \renewcommand{\P}{\mathcal{P} }
+%% \newcommand{\F}{\mathcal{F} }
+
+%% \tikzset{node/.style={circle,text=black, minimum size=.8cm, draw}}
+
+%% \newtheorem{theorem}{Theorem}[section]
+%% \newtheorem{definition}[theorem]{Definition}
+%% \newtheorem{lemma}[theorem]{Lemma}
+%% \newtheorem{corollary}[theorem]{Corollary}
+%% \newtheorem{proposition}[theorem]{Proposition}
+%% \newtheorem{remark}[theorem]{Remark}
+%% %\theoremstyle{definition}
+%% \newtheorem{exmp}[theorem]{Example}
+
+%% \title{Assignment 10}
+%% \author{Alex Loitzl}
+
+%% \begin{document}
+%% \maketitle
+
+\section{Homework 9}
+
+\subsection{Formulate QBF as a first-order theory}
+We define the theory $T_{QBF}$ over the signature $\langle \{t^0, f^0\}, \{v^1\} \}\rangle$ with constant function symbols $t$ and $f$ and a unary predicate $v$.
+
+\subsubsection{Define a first-order theory $T_{QBF}$}
+We axiomatize the theory:
+\begin{enumerate}
+  \item $\forall x, x = t \lor x = f$
+  \item $t \neq f$
+  \item $v(t)$
+  \item $\neg v(f)$
+\end{enumerate}
+
+The first two axioms restrict the models to exactly those models with a domain of cardinality of two. The third and fourth axiom ensure that the constant $t$ is interpreted as true and $f$ as false.
+
+\subsubsection{Define a function f from closed QBF formulas to $T_{QBF}$ formulas s.t. a formula $\phi$ is true iff $f(\phi)$ is satisfiable.}
+
+Let $\mathcal{P}$ be the set of propositions. We define a function $f : \mathcal{P} \to \mathcal{A}$ from propositions to atomic formulas.
+We consider formulas as defined in the lecture and add existential quantification and $\top$ as they are used in QBF.
+\begin{itemize}
+  \item $f(\top) \mapsto \top$
+  \item $f(\bot) \mapsto \bot$
+  \item $f(p) \mapsto v(p)$
+\end{itemize}
+We then get a function $\mathcal{F}: \psi_{QBF} \to \psi_{T_{QBF}}$ by mapping $f$ over the connectives of FOL.
+
+\begin{lemma}
+  For any closed QBF formula $\phi$, $\phi$ is true $\iff$ $\mathcal{F}(\phi)$ is satisfiable.
+\end{lemma}
+\begin{proof}$ $
+  We will consider the natural structure $\mathcal{I} \coloneqq \langle \{0, 1\}, \{t,f\}, \{v\}\rangle$ with $t_{\mathcal{I}} = 1$, $f_\mathcal{I} = 0$ and $v = \{1\}$. We omit writing the subscript $\mathcal{I}$ in the following. Clearly, the structure is a $T_{QBF}$-$Model$. We prove that $\phi$ is true \emph{iff} $\mathcal{I} \models \mathcal{F}(\phi)$ by induction on the structure of $\phi$.
+  \begin{itemize}
+    \item $\phi \coloneqq \bot$. For both directions we get an immediate contradiction as $\mathcal{I} \not\models \bot$ and $\bot$ is not true.
+    \item $\phi \coloneqq \top$, trivially $\mathcal{I} \models \mathcal{F}(\top) = \top$ and $\top$ is true, hence $\top$ is true \emph{iff} $\mathcal{I} \models \mathcal{F}(\top)$.
+    \item $\phi \coloneqq p$, (for completenes, $\phi$ is closed)
+    \item $\phi \coloneqq \phi_1 \impl \phi_2$. Assume $\phi$ is true, then either $\phi_1$ is false or both $\phi_1$ and $\phi_2$ are true. By induction, in the first case we get $\mathcal{I} \not\models \mathcal{F}(\phi_1)$, and therefore $\mathcal{I} \models \mathcal{F}(\phi)$ and in the second case $\mathcal{I} \models \mathcal{F}(\phi_1)$ and $\mathcal{I} \models \mathcal{F}(\phi_2)$, hence $\mathcal{I} \models \mathcal{F}(\phi)$. For the other direction, assume $\mathcal{I} \models \mathcal{F}(\phi)$. Then either $\mathcal{I} \not\models \mathcal{F}(\phi_1)$ or both $\mathcal{I} \models \mathcal{F}(\phi_1)$ and $\mathcal{I} \models \mathcal{F}(\phi_2)$. By induction, in the first case $\phi_1$ is false, hence $\phi$ true and in the second case both $\phi_1$ and $\phi_2$ are true, hence $\phi$ is true.
+    \item $\phi \coloneqq \forall \phi_1$. By (IH) we know that $\phi_1[\top]$ is true \emph{iff} $\mathcal{I} \models \mathcal{F}(\phi_1[\top])$ and $\phi_1[\bot]$ is true \emph{iff} $\mathcal{I} \models \mathcal{F}(\phi_1[\bot])$.
+    We continute to show that $\mathcal{I} \models \mathcal{F}(\phi_1[\top])$ \emph{iff} $\mathcal{I}_{x \gets 1} \models \mathcal{F}(\phi_1)$ and $\mathcal{I} \models \mathcal{F}(\phi_1[\bot])$ \emph{iff} $\mathcal{I}_{x \gets 0} \models \mathcal{F}(\phi_1)$, hence by definition of $\forall$, $\mathcal{I} \models \mathcal{F}(\phi)$
+      \paragraph{case $\top$:} Since $\mathcal{I} \models \top \iff v(t)$, we know $\mathcal{I} \models \mathcal{F}(\phi_1[v(t)])$ \emph{iff} $\mathcal{I} \models \mathcal{F}(\phi_1[\top])$ (\emph{Replacement theorem} would require another (trivial) proof by induction on formula). Moreover, $\mathcal{I} \models \mathcal{F}(\phi_1[v(t)]) \iff \mathcal{I}_{x \gets 1} \models \mathcal{F}(\phi_1[v(x)])$ and $\phi_1[v(x)] = \phi_1$. By transitivity of $\iff$, $\phi_1[\top]$ is true \emph{iff} $\mathcal{I}_{x \gets 1} \models \mathcal{F}(\phi_1)$.
+      \paragraph{case $\bot$:} Symmetric to \textbf{case $\top$}.
+    \item $\phi \coloneqq \exists \phi_1$. By definition, either $\phi_1[\bot]$ or $\phi_1[\top]$ is true.
+      We proceed by cases, by (IH) we know that in the first case $\phi_1[\top]$ is true \emph{iff} $\mathcal{I} \models \mathcal{F}(\phi_1[\top])$ and in the other case $\phi_1[\bot]$ is true \emph{iff} $\mathcal{I} \models \mathcal{F}(\phi_1[\bot])$. For each case, the proof is identical to the cases $\bot$ and $\top$ above.
+  \end{itemize}
+
+  To prove the final statement, assume $\phi$ is true, then by the proof above $\mathcal{F}(\phi)$ is satisfiable as $\mathcal{I} \models \mathcal{F}(\phi)$. For the other direction, assume $\mathcal{F}(\phi)$ is satisfiable, then there exists an $\mathcal{I}'$ s.t. $\mathcal{I}' \models \mathcal{F}(\phi)$. By the axioms, $\mathcal{I}'$ is isomorphic to $\mathcal{I}$, since $\mathcal{I}'$ is a $T_{QBF}$-Model and therefore by axioms (1) and (2) has a 2 element domain, with the element $x = \llbracket t \rrbracket_\mathcal{I}'$ being the only element s.t. $x \in \llbracket v\rrbracket_\mathcal{I}'$. Thereofre for any $\psi$, $\mathcal{I}' \models \psi$ \emph{iff} $\mathcal{I} \models \psi$. Hence, also $\mathcal{I} \models \mathcal{F}(\phi)$ and therefore $\phi$ is true.
+\end{proof}
+
+
+\subsection{Argue that Pressburger arithmetic does not allow QE.}
+
+To argue informally that Presburger arithmetic does not allow quantifier elimination in general, we need to demonstrate that there exists a formula in Presburger arithmetic where quantifier elimination is not possible. We will show this by identifying an example formula that cannot be simplified to an equivalent formula without quantifiers.
+
+Consider the formula $\phi \coloneqq \exists k, k + k = n$, the key point is that:
+
+\begin{itemize}
+    \item The formula \( \exists k (2k = n) \) expresses the idea that \( n \) is even.
+    \item In Presburger arithmetic, there is no built-in way to express divisibility by a constant like 2 without quantifying over possible values of \( k \).
+\end{itemize}
+Any attempt to eliminate the quantifier would require some form of induction or recursion, which is not possible in the setting of Presburger arithmetic (since it only allows addition and equality, and not multiplication or recursion).
+Thus, the formula \( \exists k (2k = n) \) cannot be expressed without quantifiers in Presburger arithmetic.
